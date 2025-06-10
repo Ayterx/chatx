@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
         className={clsx(
           "relative overflow-x-hidden bg-zinc-950 font-sans text-zinc-100 antialiased",
