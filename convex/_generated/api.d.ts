@@ -16,7 +16,6 @@ import type {
 import type * as account from "../account.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
-import type * as query from "../query.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -30,7 +29,6 @@ declare const fullApi: ApiFromModules<{
   account: typeof account;
   auth: typeof auth;
   http: typeof http;
-  query: typeof query;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,
