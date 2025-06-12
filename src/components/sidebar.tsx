@@ -57,7 +57,7 @@ export const Sidebar = () => {
   return (
     <>
       {!isDesktop && (
-        <div className="fixed top-2 left-2 z-50 flex items-center gap-2 rounded-md bg-neutral-900 px-2 py-1.5">
+        <div className="fixed top-2 left-2 z-49 flex items-center gap-2 rounded-md bg-neutral-900 px-2 py-1.5">
           <button className="block" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <PanelLeft className="size-4" />
           </button>
@@ -69,7 +69,7 @@ export const Sidebar = () => {
       <header
         ref={clickOutSideRef}
         className={clsx(
-          "h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 px-2.5 py-1 transition-transform max-lg:fixed lg:border-none lg:p-4",
+          "z-50 h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 px-2.5 py-1 transition-transform max-lg:fixed lg:border-none lg:p-4",
           {
             "translate-x-0": isMenuOpen && !isDesktop,
             "-translate-x-full": !isMenuOpen && !isDesktop
