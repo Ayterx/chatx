@@ -51,6 +51,7 @@ export const UserInfo = () => {
 export const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
 
   const pathname = usePathname()
 
@@ -96,6 +97,12 @@ export const Sidebar = () => {
     return () => controller.abort()
   }, [])
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsMounted(true)
+    }, 500)
+  }, [])
+
   return (
     <>
       {!isDesktop && (
@@ -111,10 +118,11 @@ export const Sidebar = () => {
       <header
         ref={clickOutSideRef}
         className={clsx(
-          "z-50 h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 px-2.5 py-1 transition-transform max-lg:fixed lg:border-none lg:p-4",
+          "z-50 h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 px-2.5 py-1 max-lg:fixed lg:border-none lg:p-4",
           {
             "translate-x-0": isMenuOpen && !isDesktop,
-            "-translate-x-full": !isMenuOpen && !isDesktop
+            "-translate-x-full": !isMenuOpen && !isDesktop,
+            "transition-transform": isMounted
           }
         )}
       >
