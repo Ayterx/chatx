@@ -4,6 +4,7 @@
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "tailwindCSS.classFunctions": ["cn", "clsx"],
   "[typescript,typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

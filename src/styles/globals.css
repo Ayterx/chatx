@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -130,4 +132,45 @@
   button {
     cursor: pointer;
   }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-button {
+    width: 4px;
+    height: 4px;
+    background-color: transparent;
+    display: block;
+    position: relative;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-neutral-800);
+    border-radius: 5px;
+    position: relative;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-neutral-700);
+  }
+
+  @keyframes bounce-dots {
+    0%,
+    100% {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+  }
+}
+
+@utility scrollbar-gutter {
+  scrollbar-gutter: stable;
 }
