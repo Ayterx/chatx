@@ -6,6 +6,8 @@ import clsx from "clsx"
 import { GeistMono } from "geist/font/mono"
 import { GeistSans } from "geist/font/sans"
 
+import { HydrationWorkaround } from "~/components/hydrationWorkaround"
+
 export const metadata: Metadata = {
   title: "ChatX"
 }
@@ -24,17 +26,19 @@ export default function RootLayout({
           GeistMono.variable
         )}
       >
-        <header className="h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 p-4 max-lg:fixed max-lg:-translate-x-100 lg:border-none">
-          <span className="block text-center text-xl font-bold text-blue-500">ChatX</span>
+        <HydrationWorkaround>
+          <header className="h-svh w-64 rounded-se-2xl border-e border-t border-neutral-800 bg-neutral-900 p-4 max-lg:fixed max-lg:-translate-x-100 lg:border-none">
+            <span className="block text-center text-xl font-bold text-blue-500">ChatX</span>
 
-          <hr className="my-2 border-neutral-800" />
-        </header>
+            <hr className="my-2 border-neutral-800" />
+          </header>
 
-        <div className="h-svh flex-1 p-2 ps-0 max-lg:p-0">
-          <main className="flex h-full flex-col rounded-2xl border-neutral-800 px-2 lg:border lg:bg-neutral-950 lg:p-2">
-            {children}
-          </main>
-        </div>
+          <div className="h-svh flex-1 p-2 ps-0 max-lg:p-0">
+            <main className="flex h-full flex-col rounded-2xl border-neutral-800 px-2 lg:border lg:bg-neutral-950 lg:p-2">
+              {children}
+            </main>
+          </div>
+        </HydrationWorkaround>
       </body>
     </html>
   )
