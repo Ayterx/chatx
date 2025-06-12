@@ -9,7 +9,7 @@ import { Copy } from "./copy"
 import { EditMessage } from "./editMessage"
 import { RetryMessage } from "./retryMessage"
 
-const minHeights = "min-h-[calc(100svh-14.125rem)] bg-red-500 lg:min-h-[calc(100svh-15.25rem)]"
+const minHeights = "min-h-[calc(100svh-14.125rem)] lg:min-h-[calc(100svh-15.25rem)]"
 
 export const actionButtonStyle = clsx(
   "block rounded-md p-1.5 text-neutral-400 transition-colors hover:bg-neutral-900 hover:text-neutral-100 focus:bg-neutral-900 focus:text-neutral-100 data-[state=open]:bg-neutral-900 data-[state=open]:text-neutral-100"
