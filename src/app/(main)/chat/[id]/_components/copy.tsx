@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Check, CopyIcon } from "lucide-react"
 
-import { actionButtonStyle } from "~/app/chat/[id]/_components/chatMessages"
+import { actionButtonStyle } from "~/app/(main)/chat/[id]/_components/chatMessages"
 
 export const Copy = ({ text }: { text: string }) => {
   const [copied, setCopied] = useState(false)
