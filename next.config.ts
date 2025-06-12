@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
     ppr: true,
     reactCompiler: true,
     viewTransition: true
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com"
+      }
+    ]
   }
 }
 

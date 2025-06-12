@@ -1,10 +1,52 @@
 "use client"
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { api } from "api"
 import clsx from "clsx"
-import { PanelLeft, PlusIcon } from "lucide-react"
+import { useQuery } from "convex/react"
+import { LogInIcon, PanelLeft, PlusIcon } from "lucide-react"
+
+export const UserInfo = () => {
+  const session = useQuery(api.account.me)
+
+  if (session === undefined) return null
+
+  if (session === "unauthorized")
+    return (
+      <Link
+        href="/auth/signin"
+        className="flex items-center gap-2 rounded-md p-2 font-medium transition-colors hover:bg-neutral-800"
+      >
+        <LogInIcon className="size-5" />
+        Sign In
+      </Link>
+    )
+
+  return (
+    <Link
+      href="/settings"
+      className="flex items-center gap-2 rounded-md p-2 transition-colors hover:bg-neutral-800"
+    >
+      <div className="flex gap-2">
+        <Image
+          src={session.image}
+          alt={session.name}
+          width={32}
+          height={32}
+          className="size-8 min-w-8 rounded-sm"
+        />
+        <div>
+          <span className="block max-h-12 overflow-hidden text-sm leading-none font-medium">
+            {session.name}
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
+}
 
 export const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -87,6 +129,8 @@ export const Sidebar = () => {
         </div>
 
         <hr className="my-2 border-neutral-800" />
+
+        <UserInfo />
       </header>
     </>
   )
