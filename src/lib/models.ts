@@ -3,7 +3,7 @@ import { BrainIcon, Icon as IconType } from "lucide-react"
 type Feature = "reasoning" | "reasoningEffort"
 
 export const modelsList = [
-  "deepseek-r1-0528",
+  "deepseek-r1-distill-llama-70b",
   "gemini-2.0-flash-001",
   "gpt-4.1-nano",
   "grok-3-mini-beta",
@@ -28,12 +28,12 @@ export const featureIcon = {
 } satisfies Record<Exclude<Feature, "reasoningEffort">, typeof IconType>
 
 export const models: ModelType = {
-  "deepseek-r1-0528": {
-    id: "deepseek-r1-0528",
+  "deepseek-r1-distill-llama-70b": {
+    id: "deepseek-r1-distill-llama-70b",
     provider: "openrouter",
-    providerId: "deepseek/deepseek-r1-0528",
+    providerId: "deepseek/deepseek-r1-distill-llama-70b",
     name: "DeepSeek R1",
-    subName: "0528",
+    subName: "Llama Distill",
     company: "DeepSeek",
     features: ["reasoning"]
   },
