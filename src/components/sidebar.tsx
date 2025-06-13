@@ -17,7 +17,7 @@ export const UserInfo = () => {
   if (session === "unauthorized")
     return (
       <Link
-        href="/auth/signin"
+        href="/auth"
         className="flex items-center gap-2 rounded-md p-2 font-medium transition-colors hover:bg-neutral-800"
       >
         <LogInIcon className="size-5" />
