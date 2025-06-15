@@ -2,6 +2,8 @@
 
 import { useEffect, unstable_ViewTransition as ViewTransition } from "react"
 import { useParams } from "next/navigation"
+import { api } from "api"
+import { useQuery } from "convex/react"
 
 import { Chat } from "~/components/chat"
 import { chatStore } from "~/components/chat/lib/store"
@@ -11,9 +13,13 @@ import { useChat } from "./_lib/useChat"
 export default function Page() {
   const params = useParams()
 
+  const chatMessages = useQuery(api.chat.getMessages, {
+    chatId: params.id as string
+  })
+
   const chat = useChat({
     chatId: params.id as string,
-    initialMessages: []
+    initialMessages: chatMessages?.messages ?? []
   })
 
   useEffect(() => {

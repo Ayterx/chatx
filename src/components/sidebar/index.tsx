@@ -9,6 +9,8 @@ import clsx from "clsx"
 import { useQuery } from "convex/react"
 import { LogInIcon, PanelLeft, PlusIcon } from "lucide-react"
 
+import { ChatList } from "./chatList"
+
 export const UserInfo = () => {
   const session = useQuery(api.account.me)
 
@@ -52,6 +54,8 @@ export const Sidebar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isDesktop, setIsDesktop] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+
+  const chats = useQuery(api.chat.getChats)
 
   const pathname = usePathname()
 
@@ -128,12 +132,25 @@ export const Sidebar = () => {
       >
         <div className="grid grid-cols-3 items-center">
           <div />
+
           <div className="block text-center text-xl font-bold text-blue-500">ChatX</div>
+
           {!isDesktop && (
             <button className="block justify-self-end" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <PanelLeft className="size-4" />
             </button>
           )}
+        </div>
+
+        <hr className="my-2 border-neutral-800" />
+
+        <div className="h-[calc(100svh-7.875rem)] overflow-y-auto *:not-[:nth-child(1)]:mt-4 lg:h-[calc(100svh-8.875rem)]">
+          {chats &&
+            (chats.length > 0 ? (
+              <ChatList chats={chats} />
+            ) : (
+              <div className="text-muted-foreground text-center text-sm">No chats yet</div>
+            ))}
         </div>
 
         <hr className="my-2 border-neutral-800" />

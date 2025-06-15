@@ -25,6 +25,7 @@ const fetcher: typeof fetch = async (url, options) => {
         reasoningEffort: chatStore.getState().options.reasoningEffort
       },
       userInfo: {
+        jwtToken: localStorage.getItem("__convexAuthJWT_main") ?? "",
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
       }
     })

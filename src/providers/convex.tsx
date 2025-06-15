@@ -8,5 +8,9 @@ import { env } from "~/env"
 const convex = new ConvexReactClient(env.NEXT_PUBLIC_CONVEX_URL)
 
 export const ConvexClientProvider = ({ children }: { children: React.ReactNode }) => {
-  return <ConvexAuthProvider client={convex}>{children}</ConvexAuthProvider>
+  return (
+    <ConvexAuthProvider client={convex} storageNamespace="main">
+      {children}
+    </ConvexAuthProvider>
+  )
 }
