@@ -1,14 +1,16 @@
 import { UIMessage } from "ai"
 import { v } from "convex/values"
 
-import { authedMutation, authedQuery } from "./_utils"
+import { authedMutation, safeAuthedQuery } from "./_utils"
 
-export const getChats = authedQuery({
+export const getChats = safeAuthedQuery({
   args: {},
   handler: async (ctx) => {
+    if (!ctx.user._id) return []
+
     const data = await ctx.db
       .query("chats")
-      .withIndex("by_userId", (q) => q.eq("userId", ctx.user._id))
+      .withIndex("by_userId", (q) => q.eq("userId", ctx.user._id!))
       .take(200)
 
     return data.map((chat) => ({
@@ -21,15 +23,17 @@ export const getChats = authedQuery({
   }
 })
 
-export const getMessages = authedQuery({
+export const getMessages = safeAuthedQuery({
   args: {
     chatId: v.string()
   },
   handler: async (ctx, args) => {
+    if (!ctx.user._id) return { messages: [] }
+
     const chat = await ctx.db
       .query("chats")
       .withIndex("by_chatId_and_userId", (q) =>
-        q.eq("chatId", args.chatId).eq("userId", ctx.user._id)
+        q.eq("chatId", args.chatId).eq("userId", ctx.user._id!)
       )
       .unique()
 
@@ -37,7 +41,9 @@ export const getMessages = authedQuery({
 
     const messages = await ctx.db
       .query("messages")
-      .withIndex("by_chatId_and_userId", (q) => q.eq("chatId", chat._id).eq("userId", ctx.user._id))
+      .withIndex("by_chatId_and_userId", (q) =>
+        q.eq("chatId", chat._id).eq("userId", ctx.user._id!)
+      )
       .collect()
 
     return {
