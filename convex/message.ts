@@ -1,7 +1,7 @@
+import { UIMessage } from "ai"
 import { v } from "convex/values"
 
 import { authedMutation, safeAuthedQuery } from "./_utils"
-import { UIMessage } from "ai"
 
 export const create = authedMutation({
   args: {
