@@ -70,6 +70,19 @@ export const getOrCreateChat = authedMutation({
   }
 })
 
+export const togglePin = authedMutation({
+  args: {
+    id: v.id("chats")
+  },
+  handler: async (ctx, args) => {
+    const chat = await ctx.db.get(args.id)
+
+    if (!chat || chat.userId !== ctx.user._id) return
+
+    await ctx.db.patch(args.id, { pinned: !chat.pinned })
+  }
+})
+
 export const updateTitle = authedMutation({
   args: {
     id: v.id("chats"),
@@ -81,5 +94,26 @@ export const updateTitle = authedMutation({
     if (!chat || chat.userId !== ctx.user._id) return
 
     await ctx.db.patch(args.id, { title: args.title })
+  }
+})
+
+export const deleteChat = authedMutation({
+  args: {
+    id: v.id("chats")
+  },
+  handler: async (ctx, args) => {
+    const chat = await ctx.db.get(args.id)
+
+    if (!chat || chat.userId !== ctx.user._id) return
+
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_chatId_and_userId", (q) => q.eq("chatId", args.id).eq("userId", ctx.user._id!))
+      .collect()
+
+    for (const message of messages) {
+      await ctx.db.delete(message._id)
+    }
+    await ctx.db.delete(args.id)
   }
 })
