@@ -8,7 +8,6 @@ import { fetchMutation } from "convex/nextjs"
 import { ConvexError } from "convex/values"
 import { z } from "zod"
 
-import { env } from "~/env"
 import { getModel } from "~/lib/models"
 import { generateTitle } from "./generateTitle"
 import { getHandledChat } from "./getChat"
@@ -23,6 +22,7 @@ const bodySchema = z.object({
     reasoningEffort: z.enum(["high", "medium", "low"]).optional().nullable()
   }),
   userInfo: z.object({
+    apiKey: z.string().optional().nullable(),
     jwtToken: z.string().optional().nullable(),
     timezone: z.string()
   })
@@ -46,6 +46,12 @@ export const POST = async (request: NextRequest) => {
 
   if (!model) return new NextResponse("Model not found", { status: 400 })
 
+  if (!body.userInfo.apiKey)
+    return new NextResponse(
+      "OpenRouter API key is required, Click the user icon in the bottom left corner to add it",
+      { status: 401 }
+    )
+
   const chat = await getHandledChat(body.id, body.userInfo.jwtToken)
 
   if (chat.type === "error") {
@@ -62,7 +68,7 @@ export const POST = async (request: NextRequest) => {
 
   if (model.provider === "openrouter") {
     const openrouter = createOpenRouter({
-      apiKey: env.OPENROUTER_API_KEY,
+      apiKey: body.userInfo.apiKey,
       compatibility: "compatible"
     })
 
@@ -82,7 +88,7 @@ export const POST = async (request: NextRequest) => {
   if (chat.data.isNewChat)
     void generateTitle({
       chatDocId: chat.data.docId,
-      openrouterKey: env.OPENROUTER_API_KEY,
+      openrouterKey: body.userInfo.apiKey,
       token: body.userInfo.jwtToken,
       userMessage: body.message
     })

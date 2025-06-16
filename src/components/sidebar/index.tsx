@@ -1,17 +1,32 @@
 "use client"
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useTransition } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { api } from "api"
 import clsx from "clsx"
 import { useQuery } from "convex/react"
-import { LogInIcon, PanelLeft, PlusIcon } from "lucide-react"
+import { EllipsisVerticalIcon, LogInIcon, PanelLeft, PlusIcon } from "lucide-react"
+import { toast } from "sonner"
 
+import { Button } from "../interface/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "../interface/dialog"
 import { ChatList } from "./chatList"
 
 export const UserInfo = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [apiKey] = useState(() => localStorage.getItem("openrouter-api-key") ?? "")
+
+  const [isPending, startTransition] = useTransition()
+
   const session = useQuery(api.account.me)
 
   if (session === undefined) return null
@@ -28,25 +43,80 @@ export const UserInfo = () => {
     )
 
   return (
-    <Link
-      href="/settings"
-      className="flex items-center gap-2 rounded-md p-2 transition-colors hover:bg-neutral-800"
-    >
-      <div className="flex gap-2">
-        <Image
-          src={session.image}
-          alt={session.name}
-          width={32}
-          height={32}
-          className="size-8 min-w-8 rounded-sm"
-        />
-        <div>
-          <span className="block max-h-12 overflow-hidden text-sm leading-none font-medium">
-            {session.name}
-          </span>
-        </div>
-      </div>
-    </Link>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger asChild>
+        <button className="flex items-center justify-between gap-2 rounded-md p-2 transition-colors hover:bg-neutral-800">
+          <div className="flex items-center gap-2">
+            <Image
+              src={session.image}
+              alt={session.name}
+              width={32}
+              height={32}
+              className="size-8 min-w-8 rounded-sm"
+            />
+            <span className="block max-h-12 overflow-hidden text-left text-sm leading-none font-medium">
+              {session.name}
+            </span>
+          </div>
+
+          <EllipsisVerticalIcon className="size-4" />
+        </button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>OpenRouter API Key</DialogTitle>
+          <DialogDescription>
+            Your OpenRouter API key is saved in your browser&apos;s local storage and sent with
+            every request.
+          </DialogDescription>
+        </DialogHeader>
+        <form
+          onSubmit={async (event) => {
+            event.preventDefault()
+
+            const formData = new FormData(event.currentTarget)
+            const formApiKey = formData.get("apiKey") as string
+
+            if (!formApiKey || formApiKey === apiKey) return
+
+            startTransition(async () => {
+              const request = await fetch("https://openrouter.ai/api/v1/key", {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${formApiKey}`
+                }
+              })
+
+              const data = await request.json()
+
+              console.log(data)
+
+              if (!request.ok) {
+                toast.error("Invalid API key", { position: "top-center" })
+                return
+              }
+
+              localStorage.setItem("openrouter-api-key", formApiKey)
+
+              toast.success("API key saved", { position: "top-center" })
+              setIsDialogOpen(false)
+            })
+          }}
+          className="flex flex-col gap-2"
+        >
+          <input
+            type="password"
+            name="apiKey"
+            placeholder="Key"
+            defaultValue={apiKey}
+            className="w-full rounded-md bg-neutral-800 px-2 py-1 outline-none"
+          />
+          <Button type="submit" className="self-end" disabled={isPending}>
+            {isPending ? "Saving..." : "Save"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
 

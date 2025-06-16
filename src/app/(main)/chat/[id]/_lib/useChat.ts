@@ -25,7 +25,8 @@ const fetcher: typeof fetch = async (url, options) => {
         reasoningEffort: chatStore.getState().options.reasoningEffort
       },
       userInfo: {
-        jwtToken: localStorage.getItem("__convexAuthJWT_main") ?? "",
+        apiKey: localStorage.getItem("openrouter-api-key"),
+        jwtToken: localStorage.getItem("__convexAuthJWT_main"),
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
       }
     })
@@ -133,12 +134,31 @@ export const useChat = ({
     [messages, reload, setMessages]
   )
 
+  const retryErroredMessage = useCallback(async () => {
+    const lastMessage = messages[messages.length - 1]
+    if (!lastMessage) return
+
+    const msgs = messages.slice(0, messages.length - 1)
+    setMessages(msgs)
+
+    const store = chatStore.getState()
+
+    await handleSubmit({
+      ...store,
+      input: {
+        ...store.input,
+        prompt: messages[messages.length - 1].content
+      }
+    })
+  }, [messages, setMessages, handleSubmit])
+
   return {
     editingMessageId,
     error,
     handleEditMessage,
     handleSubmit,
     messages,
+    retryErroredMessage,
     retryMessage,
     setEditingMessageId,
     status,

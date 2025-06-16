@@ -1,9 +1,12 @@
 import { HydrationWorkaround } from "~/components/hydrationWorkaround"
+import { Toaster } from "~/components/interface/sonner"
 import { Sidebar } from "~/components/sidebar"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <HydrationWorkaround>
+      <Toaster />
+
       <Sidebar />
 
       <div className="h-svh flex-1 max-lg:pt-2 lg:ps-0 lg:pt-2">

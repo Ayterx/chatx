@@ -1,4 +1,4 @@
-import { PencilSquareIcon } from "@heroicons/react/16/solid"
+import { ArrowPathIcon, PencilSquareIcon } from "@heroicons/react/16/solid"
 import clsx from "clsx"
 
 import type { useChat } from "../_lib/useChat"
@@ -20,6 +20,7 @@ export const ChatMessages = ({
   error,
   handleEditMessage,
   messages,
+  retryErroredMessage,
   retryMessage,
   setEditingMessageId,
   status
@@ -148,10 +149,12 @@ export const ChatMessages = ({
 
       {status === "error" && (
         <div className={clsx("pt-4", minHeights)}>
-          <div className="rounded-lg border border-red-500/15 bg-red-500/10 px-4 py-2 text-red-500">
+          <div className="mb-1 rounded-lg border border-red-500/15 bg-red-500/10 px-4 py-2 text-red-500">
             {error?.message}
           </div>
-          {/* TODO: add a button to retry the message */}
+          <button onClick={retryErroredMessage} className={actionButtonStyle}>
+            <ArrowPathIcon className="size-4" />
+          </button>
         </div>
       )}
     </section>
