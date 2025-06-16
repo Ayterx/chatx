@@ -1,6 +1,7 @@
 import { v } from "convex/values"
 
-import { authedMutation } from "./_utils"
+import { authedMutation, safeAuthedQuery } from "./_utils"
+import { UIMessage } from "ai"
 
 export const create = authedMutation({
   args: {
@@ -30,6 +31,58 @@ export const create = authedMutation({
         reasoningEffort: args.options.reasoningEffort
       }
     })
+})
+
+export const getMessages = safeAuthedQuery({
+  args: {
+    chatId: v.string()
+  },
+  handler: async (ctx, args) => {
+    if (!ctx.user._id) return { messages: [] }
+
+    const chat = await ctx.db
+      .query("chats")
+      .withIndex("by_chatId_and_userId", (q) =>
+        q.eq("chatId", args.chatId).eq("userId", ctx.user._id!)
+      )
+      .unique()
+
+    if (!chat) return { messages: [] }
+
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_chatId_and_userId", (q) =>
+        q.eq("chatId", chat._id).eq("userId", ctx.user._id!)
+      )
+      .collect()
+
+    return {
+      messages: messages.map((message) => {
+        const parts: UIMessage["parts"] = []
+
+        if (message.reasoning)
+          parts.push({
+            type: "reasoning",
+            reasoning: message.reasoning,
+            details: []
+          })
+
+        return {
+          id: message._id,
+          role: message.role,
+          content: message.content,
+          parts: [
+            ...parts,
+            {
+              type: "text",
+              text: message.content
+            }
+          ],
+          annotations: [{ model: message.options.modelId }]
+        }
+      }) satisfies UIMessage[]
+    }
+  }
 })
 
 export const del = authedMutation({

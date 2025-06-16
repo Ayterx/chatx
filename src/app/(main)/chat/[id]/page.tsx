@@ -13,7 +13,7 @@ import { useChat } from "./_lib/useChat"
 export default function Page() {
   const params = useParams()
 
-  const chatMessages = useQuery(api.chat.getMessages, {
+  const chatMessages = useQuery(api.message.getMessages, {
     chatId: params.id as string
   })
 
