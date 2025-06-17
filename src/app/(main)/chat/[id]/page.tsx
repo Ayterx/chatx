@@ -47,7 +47,7 @@ export default function Page() {
         <ChatMessages {...chat} chatId={params.id as string} />
       </div>
 
-      <div className="relative z-49 flex w-full flex-[0_0_auto] justify-center before:pointer-events-none before:absolute before:bottom-full before:h-12 before:w-full before:max-w-3xl before:bg-gradient-to-b before:from-neutral-950/0 before:to-neutral-950 max-lg:pb-2">
+      <div className="relative z-49 flex w-full flex-[0_0_auto] justify-center before:pointer-events-none before:absolute before:bottom-full before:h-12 before:w-full before:max-w-3xl before:bg-gradient-to-b before:from-neutral-950/0 before:to-neutral-950 max-lg:pb-2 lg:pe-2">
         <ViewTransition name="input">
           <Chat
             chatStatus={chat.status}
