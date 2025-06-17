@@ -120,15 +120,18 @@ export const ChatMessages = ({
                   </>
                 )}
                 {message.role === "user" && (
-                  <button
-                    onClick={() => {
-                      if (editingMessageId === message.id) setEditingMessageId(null)
-                      else setEditingMessageId(message.id)
-                    }}
-                    className={actionButtonStyle}
-                  >
-                    <PencilSquareIcon className="size-4" />
-                  </button>
+                  <>
+                    <Copy text={message.content} />
+                    <button
+                      onClick={() => {
+                        if (editingMessageId === message.id) setEditingMessageId(null)
+                        else setEditingMessageId(message.id)
+                      }}
+                      className={actionButtonStyle}
+                    >
+                      <PencilSquareIcon className="size-4" />
+                    </button>
+                  </>
                 )}
               </div>
             </div>
