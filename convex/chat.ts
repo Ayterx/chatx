@@ -13,11 +13,12 @@ export const getChats = safeAuthedQuery({
       .take(200)
 
     return data.map((chat) => ({
-      docId: chat._id,
       chatId: chat.chatId,
-      title: chat.title,
+      createdAt: chat._creationTime,
+      docId: chat._id,
+      parentChatId: chat.parentChatId,
       pinned: chat.pinned,
-      createdAt: chat._creationTime
+      title: chat.title
     }))
   }
 })
@@ -66,6 +67,54 @@ export const getOrCreateChat = authedMutation({
       docId: chatId,
       isNewChat: true,
       messages: []
+    }
+  }
+})
+
+export const branchOff = authedMutation({
+  args: {
+    chatId: v.string(),
+    messageIndex: v.number()
+  },
+  handler: async (ctx, args) => {
+    const chat = await ctx.db
+      .query("chats")
+      .withIndex("by_chatId_and_userId", (q) =>
+        q.eq("chatId", args.chatId).eq("userId", ctx.user._id)
+      )
+      .unique()
+
+    if (!chat || chat.userId !== ctx.user._id) return
+
+    const messages = await ctx.db
+      .query("messages")
+      .withIndex("by_chatId_and_userId", (q) => q.eq("chatId", chat._id).eq("userId", ctx.user._id))
+      .collect()
+
+    const slicedMessages = messages.slice(0, args.messageIndex + 1)
+
+    const newChatId = crypto.randomUUID()
+    const newId = await ctx.db.insert("chats", {
+      chatId: newChatId,
+      userId: ctx.user._id,
+      title: chat.title,
+      pinned: false,
+      parentChatId: chat._id
+    })
+
+    for (const message of slicedMessages) {
+      await ctx.db.insert("messages", {
+        chatId: newId,
+        userId: ctx.user._id,
+        role: message.role,
+        reasoning: message.reasoning,
+        content: message.content,
+        options: message.options
+      })
+    }
+
+    return {
+      chatId: newChatId
     }
   }
 })

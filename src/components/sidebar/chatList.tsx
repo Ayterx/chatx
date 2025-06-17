@@ -95,7 +95,7 @@ export const ChatList = ({ chats }: { chats: Chat[] }) => {
               <Link
                 href={`/chat/${chat.chatId}`}
                 className={clsx(
-                  "group relative flex w-full items-center overflow-hidden rounded-md py-2 ps-2 pe-8 text-sm transition-colors",
+                  "group relative flex w-full items-center gap-1 overflow-hidden rounded-md py-2 ps-2 pe-8 text-sm transition-colors",
                   {
                     "bg-neutral-800": pathname === `/chat/${chat.chatId}`,
                     "text-neutral-300 hover:bg-neutral-800 hover:text-neutral-100 focus:bg-neutral-800 focus:text-neutral-100":
@@ -103,13 +103,30 @@ export const ChatList = ({ chats }: { chats: Chat[] }) => {
                   }
                 )}
               >
+                {chat.parentChatId && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="size-4 text-neutral-400"
+                  >
+                    <path d="M6.02,5.78m0,15.31V4.55m0,0v-1.91m0,3.14v-1.23m0,1.23c0,1.61,1.21,3.11,3.2,3.94l4.58,1.92c1.98,.83,3.2,2.32,3.2,3.94v3.84" />
+                    <path d="M20.53,17.59l-3.41,3.66-3.66-3.41" />
+                  </svg>
+                )}
                 <span className="truncate">{chat.title}</span>
                 <div className="absolute end-0 flex h-full items-center gap-2 px-2 group-hover:bg-neutral-800/50">
                   <LoadingIndicator />
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="relative rounded-sm group-hover:opacity-100 group-focus:opacity-100 hover:bg-neutral-700 lg:opacity-0">
+                      <button className="relative rounded-sm group-hover:opacity-100 group-focus:opacity-100 lg:opacity-0">
                         <EllipsisHorizontalIcon className="size-5" />
                       </button>
                     </DropdownMenuTrigger>

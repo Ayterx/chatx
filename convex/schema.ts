@@ -11,7 +11,9 @@ const schema = defineSchema({
 
     title: v.string(),
 
-    pinned: v.boolean()
+    pinned: v.boolean(),
+
+    parentChatId: v.optional(v.id("chats"))
   })
     .index("by_userId", ["userId"])
     .index("by_chatId_and_userId", ["chatId", "userId"]),
