@@ -3,6 +3,9 @@ import { BrainIcon, Icon as IconType } from "lucide-react"
 type Feature = "reasoning" | "reasoningEffort"
 
 export const modelsList = [
+  "claude-3.7-sonnet:thinking",
+  "claude-3.7-sonnet",
+  "claude-sonnet-4",
   "deepseek-r1-distill-llama-70b",
   "gemini-2.0-flash-001",
   "gpt-4.1-nano",
@@ -28,6 +31,28 @@ export const featureIcon = {
 } satisfies Record<Exclude<Feature, "reasoningEffort">, typeof IconType>
 
 export const models: ModelType = {
+  "claude-3.7-sonnet:thinking": {
+    id: "claude-3.7-sonnet:thinking",
+    provider: "openrouter",
+    providerId: "anthropic/claude-3.7-sonnet:thinking",
+    name: "Claude 3.7 Sonnet",
+    company: "Anthropic",
+    features: ["reasoning"]
+  },
+  "claude-3.7-sonnet": {
+    id: "claude-3.7-sonnet",
+    provider: "openrouter",
+    providerId: "anthropic/claude-3.7-sonnet",
+    name: "Claude 3.7 Sonnet",
+    company: "Anthropic"
+  },
+  "claude-sonnet-4": {
+    id: "claude-sonnet-4",
+    provider: "openrouter",
+    providerId: "anthropic/claude-sonnet-4",
+    name: "Claude Sonnet 4",
+    company: "Anthropic"
+  },
   "deepseek-r1-distill-llama-70b": {
     id: "deepseek-r1-distill-llama-70b",
     provider: "openrouter",
