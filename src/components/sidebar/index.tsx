@@ -205,10 +205,17 @@ export const Sidebar = () => {
 
           <div className="block text-center text-xl font-bold text-blue-500">ChatX</div>
 
-          {!isDesktop && (
+          {!isDesktop ? (
             <button className="block justify-self-end" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <PanelLeft className="size-4" />
             </button>
+          ) : (
+            <Link
+              href="/"
+              className="justify-self-end rounded-sm p-0.5 transition-colors hover:bg-neutral-800"
+            >
+              <PlusIcon className="size-4" />
+            </Link>
           )}
         </div>
 
