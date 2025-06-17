@@ -121,7 +121,7 @@ export const ChatList = ({ chats }: { chats: Chat[] }) => {
                   </svg>
                 )}
                 <span className="truncate">{chat.title}</span>
-                <div className="absolute end-0 flex h-full items-center gap-2 px-2 group-hover:bg-neutral-800/50">
+                <div className="absolute end-0 flex h-full items-center gap-2 px-2 transition-colors group-hover:bg-neutral-800/50">
                   <LoadingIndicator />
 
                   <DropdownMenu>
