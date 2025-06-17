@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Check, CopyIcon } from "lucide-react"
 
 import { actionButtonStyle } from "~/app/(main)/chat/[id]/_components/chatMessages"
+import { Tooltipy } from "~/components/interface/tooltip"
 
 export const Copy = ({ text }: { text: string }) => {
   const [copied, setCopied] = useState(false)
@@ -17,8 +18,10 @@ export const Copy = ({ text }: { text: string }) => {
   }
 
   return (
-    <button className={actionButtonStyle} onClick={handleCopy}>
-      {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
-    </button>
+    <Tooltipy content="Copy">
+      <button className={actionButtonStyle} onClick={handleCopy}>
+        {copied ? <Check className="size-4" /> : <CopyIcon className="size-4" />}
+      </button>
+    </Tooltipy>
   )
 }

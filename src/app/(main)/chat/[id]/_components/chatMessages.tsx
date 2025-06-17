@@ -4,6 +4,7 @@ import clsx from "clsx"
 import type { useChat } from "../_lib/useChat"
 import { Markdown } from "~/app/(main)/chat/[id]/_components/markdown"
 import { Reasoning } from "~/app/(main)/chat/[id]/_components/reasoning"
+import { Tooltipy } from "~/components/interface/tooltip"
 import { getModel } from "~/lib/models"
 import { BranchOff } from "./branchOff"
 import { Copy } from "./copy"
@@ -122,15 +123,17 @@ export const ChatMessages = ({
                 {message.role === "user" && (
                   <>
                     <Copy text={message.content} />
-                    <button
-                      onClick={() => {
-                        if (editingMessageId === message.id) setEditingMessageId(null)
-                        else setEditingMessageId(message.id)
-                      }}
-                      className={actionButtonStyle}
-                    >
-                      <PencilSquareIcon className="size-4" />
-                    </button>
+                    <Tooltipy content="Edit">
+                      <button
+                        onClick={() => {
+                          if (editingMessageId === message.id) setEditingMessageId(null)
+                          else setEditingMessageId(message.id)
+                        }}
+                        className={actionButtonStyle}
+                      >
+                        <PencilSquareIcon className="size-4" />
+                      </button>
+                    </Tooltipy>
                   </>
                 )}
               </div>

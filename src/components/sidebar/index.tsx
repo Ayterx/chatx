@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "../interface/dialog"
+import { Tooltipy } from "../interface/tooltip"
 import { ChatList } from "./chatList"
 
 export const UserInfo = () => {
@@ -210,12 +211,14 @@ export const Sidebar = () => {
               <PanelLeft className="size-4" />
             </button>
           ) : (
-            <Link
-              href="/"
-              className="justify-self-end rounded-sm p-0.5 transition-colors hover:bg-neutral-800"
-            >
-              <PlusIcon className="size-4" />
-            </Link>
+            <Tooltipy content="New chat">
+              <Link
+                href="/"
+                className="justify-self-end rounded-sm p-0.5 transition-colors hover:bg-neutral-800"
+              >
+                <PlusIcon className="size-4" />
+              </Link>
+            </Tooltipy>
           )}
         </div>
 
