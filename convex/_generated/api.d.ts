@@ -19,6 +19,7 @@ import type * as auth from "../auth.js";
 import type * as chat from "../chat.js";
 import type * as http from "../http.js";
 import type * as message from "../message.js";
+import type * as share from "../share.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -35,6 +36,7 @@ declare const fullApi: ApiFromModules<{
   chat: typeof chat;
   http: typeof http;
   message: typeof message;
+  share: typeof share;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

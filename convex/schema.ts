@@ -31,7 +31,28 @@ const schema = defineSchema({
       modelId: v.string(),
       reasoningEffort: v.optional(v.union(v.literal("low"), v.literal("medium"), v.literal("high")))
     })
-  }).index("by_chatId_and_userId", ["chatId", "userId"])
+  }).index("by_chatId_and_userId", ["chatId", "userId"]),
+
+  chatShares: defineTable({
+    messageId: v.id("messages"),
+    ownerId: v.id("users"),
+    title: v.string(),
+    validFor: v.number(),
+
+    messages: v.array(
+      v.object({
+        role: v.union(v.literal("user"), v.literal("assistant")),
+        reasoning: v.optional(v.string()),
+        content: v.string(),
+        options: v.object({
+          modelId: v.string(),
+          reasoningEffort: v.optional(
+            v.union(v.literal("low"), v.literal("medium"), v.literal("high"))
+          )
+        })
+      })
+    )
+  }).index("by_ownerId_and_messageId", ["ownerId", "messageId"])
 })
 
 export default schema
