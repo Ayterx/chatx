@@ -9,10 +9,20 @@
 
 ## Features
 
+Features:
+- Branch off
+- Bring Your Own Key
+- Clone Chat
+- Delete Chat
+- Edit message
+- Mobile support
+- Pin Chat
+- Reasoning
+- Rename Chat
+- Retry message
+- Share Chat
 - Sync
 - Syntax highlighting
-- Bring Your Own Key
-- Mobile support
 
 ## Getting Started
 
