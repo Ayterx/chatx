@@ -8,6 +8,7 @@ export const createShareLink = authedMutation({
   args: {
     chatId: v.string(),
     messageId: v.id("messages"),
+    messageIndex: v.number(),
     validFor: v.number()
   },
   handler: async (ctx, args) => {
@@ -34,13 +35,15 @@ export const createShareLink = authedMutation({
       .withIndex("by_chatId_and_userId", (q) => q.eq("chatId", chat._id).eq("userId", ctx.user._id))
       .collect()
 
+    const slicedMessages = messages.slice(0, args.messageIndex + 1)
+
     const shareLink = await ctx.db.insert("chatShares", {
       messageId: args.messageId,
       ownerId: ctx.user._id!,
       title: chat.title,
       validFor: args.validFor,
 
-      messages: messages.map((message) => ({
+      messages: slicedMessages.map((message) => ({
         role: message.role,
         reasoning: message.reasoning,
         content: message.content,

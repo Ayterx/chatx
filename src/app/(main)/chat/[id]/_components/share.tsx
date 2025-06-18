@@ -25,7 +25,15 @@ import { Id } from "../../../../../../convex/_generated/dataModel"
 import { actionButtonStyle } from "./chatMessages"
 import { Copy } from "./copy"
 
-export const Share = ({ chatId, messageId }: { chatId: string; messageId: string }) => {
+export const Share = ({
+  chatId,
+  messageId,
+  messageIndex
+}: {
+  chatId: string
+  messageId: string
+  messageIndex: number
+}) => {
   const [shareLink, setShareLink] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -67,6 +75,7 @@ export const Share = ({ chatId, messageId }: { chatId: string; messageId: string
                     const shareLink = await createShareLink({
                       chatId,
                       messageId: messageId as Id<"messages">,
+                      messageIndex,
                       validFor: Number(validFor)
                     })
                     setShareLink(shareLink)
