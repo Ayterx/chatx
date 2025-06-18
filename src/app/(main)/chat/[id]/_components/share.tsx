@@ -21,19 +21,10 @@ import {
   SelectValue
 } from "~/components/interface/select"
 import { Tooltipy } from "~/components/interface/tooltip"
-import { Id } from "../../../../../../convex/_generated/dataModel"
 import { actionButtonStyle } from "./chatMessages"
 import { Copy } from "./copy"
 
-export const Share = ({
-  chatId,
-  messageId,
-  messageIndex
-}: {
-  chatId: string
-  messageId: string
-  messageIndex: number
-}) => {
+export const Share = ({ chatId, messageIndex }: { chatId: string; messageIndex: number }) => {
   const [shareLink, setShareLink] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -74,7 +65,6 @@ export const Share = ({
                   startTransition(async () => {
                     const shareLink = await createShareLink({
                       chatId,
-                      messageId: messageId as Id<"messages">,
                       messageIndex,
                       validFor: Number(validFor)
                     })

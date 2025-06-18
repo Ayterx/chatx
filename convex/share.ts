@@ -7,7 +7,6 @@ import { authedMutation, authedQuery } from "./_utils"
 export const createShareLink = authedMutation({
   args: {
     chatId: v.string(),
-    messageId: v.id("messages"),
     messageIndex: v.number(),
     validFor: v.number()
   },
@@ -21,24 +20,28 @@ export const createShareLink = authedMutation({
 
     if (!chat) throw new ConvexError("Chat not found")
 
-    const shareLinkExist = await ctx.db
-      .query("chatShares")
-      .withIndex("by_ownerId_and_messageId", (q) =>
-        q.eq("ownerId", ctx.user._id).eq("messageId", args.messageId)
-      )
-      .unique()
-
-    if (shareLinkExist) return shareLinkExist._id
-
     const messages = await ctx.db
       .query("messages")
       .withIndex("by_chatId_and_userId", (q) => q.eq("chatId", chat._id).eq("userId", ctx.user._id))
       .collect()
 
+    const message = await ctx.db.get(messages[args.messageIndex]._id)
+
+    if (!message) throw new ConvexError("Message not found")
+
+    const shareLinkExist = await ctx.db
+      .query("chatShares")
+      .withIndex("by_ownerId_and_messageId", (q) =>
+        q.eq("ownerId", ctx.user._id).eq("messageId", message._id)
+      )
+      .unique()
+
+    if (shareLinkExist) return shareLinkExist._id
+
     const slicedMessages = messages.slice(0, args.messageIndex + 1)
 
     const shareLink = await ctx.db.insert("chatShares", {
-      messageId: args.messageId,
+      messageId: message._id,
       ownerId: ctx.user._id!,
       title: chat.title,
       validFor: args.validFor,
